@@ -35,7 +35,7 @@ runObserver();
 function createWrapperDiv(width, height, imageUrl) {
     var wrapperDiv = document.createElement('div');
     wrapperDiv.style.position = 'relative';
-    wrapperDiv.style.display = 'block';
+    wrapperDiv.style.display = 'inline-block';
     wrapperDiv.style.width = width + 'px';
     wrapperDiv.style.height = height + 'px';
     wrapperDiv.style.backgroundImage = 'url(' + imageUrl + ')'
@@ -116,7 +116,7 @@ function replaceImages(selector, node) {
 
             var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
 
-            object.style.display = 'block';
+            object.style.display = 'inline-block';
             object.style.position = 'absolute';
             object.style.width = object.clientWidth / 3 + 'px';
             object.style.height = object.clientHeight / 3 + 'px';

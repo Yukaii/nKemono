@@ -1,5 +1,8 @@
+div[kemono-injected] > img {
+  transition: width cubic-bezier(0.645, 0.045, 0.355, 1) 0.4s, height cubic-bezier(0.645, 0.045, 0.355, 1) 0.4s;
+}
+
 div[kemono-injected]:hover > img {
   width: 100% !important;
   height: 100% !important;
-  transition: cubic-bezier(0.165, 0.84, 0.44, 1) 0.4s;
 }
