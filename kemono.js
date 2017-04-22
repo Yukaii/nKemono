@@ -118,8 +118,8 @@ function replaceImages(selector, node) {
 
             object.style.display = 'inline-block';
             object.style.position = 'absolute';
-            object.style.width = object.clientWidth / 3 + 'px';
-            object.style.height = object.clientHeight / 3 + 'px';
+            object.style.width = '100%';
+            object.style.height = '100%';
             object.style.right = null;
             object.style.bottom = null;
             object.style.top = 0;
