@@ -1,24 +1,54 @@
-(function() {
+var observer;
+var domSelector = 'img:not([kemono-injected]), a:not([kemono-injected]), figure:not([kemono-injected]), div:not([kemono-injected])';
+
+function createObserver () {
+   return new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.addedNodes && mutation.addedNodes.length > 0 ) {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node) {
+                        replaceImages(domSelector, node);
+                    }
+                });
+            }
+        });
+
+        observer.disconnect();
+        runObserver();
+    });
+}
+
+
+function runObserver () {
     // kemono
     chrome.runtime.sendMessage({msg: 'getDisabled'}, function(response) {
         if (!response.disabled) {
-            replaceImages('img, a, figure, div');
+            replaceImages(domSelector);
             var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-            var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
-                    if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-                        mutation.addedNodes.forEach(function (node) {
-                            if (node) {
-                                replaceImages('img, a, figure, div', node);
-                            }
-                        });
-                    }
-                });
-            });
+            observer = createObserver();
             observer.observe(document.body, { childList: true, subtree: true });
         }
     });
-})();
+};
+runObserver();
+
+function createWrapperDiv(width, height, imageUrl) {
+    var wrapperDiv = document.createElement('div');
+    wrapperDiv.style.position = 'relative';
+    wrapperDiv.style.display = 'block';
+    wrapperDiv.style.width = width + 'px';
+    wrapperDiv.style.height = height + 'px';
+    wrapperDiv.style.backgroundImage = 'url(' + imageUrl + ')'
+    wrapperDiv.style.backgroundPosition = 'center';
+    wrapperDiv.style.backgroundSize = 'cover';
+    wrapperDiv.setAttribute('kemono-injected', '');
+    return wrapperDiv;
+}
+
+function wrapDiv(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+}
 
 function replaceImages(selector, node) {
     var objects;
@@ -83,7 +113,20 @@ function replaceImages(selector, node) {
                     object.style.objectFit = 'cover';
                 }
             }
-            object.src = imgSrc;
+
+            var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
+
+            object.style.display = 'block';
+            object.style.position = 'absolute';
+            object.style.width = object.clientWidth / 3 + 'px';
+            object.style.height = object.clientHeight / 3 + 'px';
+            object.style.right = null;
+            object.style.bottom = null;
+            object.style.top = 0;
+            object.style.left = 0;
+            object.setAttribute('kemono-injected', '');
+
+            wrapDiv(object, wrapElement);
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
             object.style.backgroundImage = "url('" + imgSrc + "')";
             object.style.backgroundPosition = 'center';
