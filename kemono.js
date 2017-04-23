@@ -80,9 +80,10 @@ function replaceImages(selector, node) {
     for (var i = 0; i < objects.length; i++) {
         var imgSrc = imagePrefix + imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         var object = objects[i];
+        object.setAttribute('kemono-injected', '');
+
         if (object.src && 'IMG' === object.tagName) {
             var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
-
             object.style.display = 'inline-block';
             object.style.position = 'absolute';
             object.style.width = '100%';
@@ -91,8 +92,6 @@ function replaceImages(selector, node) {
             object.style.bottom = null;
             object.style.top = 0;
             object.style.left = 0;
-            object.setAttribute('kemono-injected', '');
-
             wrapDiv(object, wrapElement);
 
             if (object.srcset) {
