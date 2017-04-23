@@ -81,6 +81,20 @@ function replaceImages(selector, node) {
         var imgSrc = imagePrefix + imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         var object = objects[i];
         if (object.src && 'IMG' === object.tagName) {
+            var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
+
+            object.style.display = 'inline-block';
+            object.style.position = 'absolute';
+            object.style.width = '100%';
+            object.style.height = '100%';
+            object.style.right = null;
+            object.style.bottom = null;
+            object.style.top = 0;
+            object.style.left = 0;
+            object.setAttribute('kemono-injected', '');
+
+            wrapDiv(object, wrapElement);
+
             if (object.srcset) {
                 object.srcset = imgSrc;
             }
@@ -113,20 +127,6 @@ function replaceImages(selector, node) {
                     object.style.objectFit = 'cover';
                 }
             }
-
-            var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
-
-            object.style.display = 'inline-block';
-            object.style.position = 'absolute';
-            object.style.width = '100%';
-            object.style.height = '100%';
-            object.style.right = null;
-            object.style.bottom = null;
-            object.style.top = 0;
-            object.style.left = 0;
-            object.setAttribute('kemono-injected', '');
-
-            wrapDiv(object, wrapElement);
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
             object.style.backgroundImage = "url('" + imgSrc + "')";
             object.style.backgroundPosition = 'center';
